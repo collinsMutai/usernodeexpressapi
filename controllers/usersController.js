@@ -2,49 +2,61 @@ const User = require("../models/userModel");
 
 const mongodb = require("mongodb");
 
-const { v4: uuidv4 } = require("uuid");
-
-// let users = [];
+exports.getCreateUser = (req, res, next) => {
+  res.render("addedit", {
+    editing: false,
+    path: "/users/add-user",
+  });
+};
 
 exports.createUser = (req, res, next) => {
-  const user = req.body;
+  const { firstName, lastName, age } = req.body;
 
-  const userWithId = users.push({ ...user, id: uuidv4() });
+  const user = new User({
+    firstName: firstName,
+    lastName: lastName,
+    age: age,
+  });
 
-  res.send(`user ${user.firstName} added to ${userWithId}`);
+  user
+    .save()
+    .then(() => {
+      res.redirect("/");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
-exports.getUser = (req, res, next) => {
-  User.find().then((users) => {
-    console.log(users);
-    res.send(users);
-  });
-};
+exports.getEditUser = (req, res, next) => {
+  const editMode = req.query.edit;
 
-exports.getUserById = (req, res, next) => {
-  const { id } = req.params;
+  if (!editMode) {
+    return redirect("/");
+  }
 
-  User.findById({ _id: new mongodb.ObjectId(id) }).then((user) => {
-    console.log(user);
-    res.send(user);
-  });
-};
+  const userId = req.params.userId;
 
-exports.deleteUser = (req, res, next) => {
-  const { id } = req.params;
-
-  User.findByIdAndRemove({ _id: new mongodb.ObjectId(id) }).then(() => {
-    console.log("user deleted");
-    res.send(`user ${id} deleted from db`);
-  });
+  User.findById(userId)
+    .then((user) => {
+      if (!user) {
+        res.redirect("/");
+      }
+      res.render("addedit", {
+        editing: editMode,
+        user: user,
+        path: "/users/edit-user",
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 exports.updateUser = (req, res, next) => {
-  const { id } = req.params;
-  
-  const { firstName, lastName, age } = req.body;
+  const { firstName, lastName, age, userId } = req.body;
 
-  User.findById({ _id: new mongodb.ObjectId(id) })
+  User.findById(userId)
     .then((user) => {
       if (firstName) {
         user.firstName = firstName;
@@ -59,7 +71,41 @@ exports.updateUser = (req, res, next) => {
     })
     .then(() => {
       console.log("user updated");
-    });
+      res.redirect("/");
+    })
+    .catch((err) => console.log(err));
+};
 
-  res.send(`user ${id} updated`);
+exports.getUsers = (req, res, next) => {
+  User.find()
+    .then((users) => {
+      res.render("users", {
+        users: users,
+        path: "/",
+      });
+    })
+    .catch((err) => console.log(err));
+};
+
+exports.getUserById = (req, res, next) => {
+  const { userId } = req.params;
+
+  User.findById(userId)
+    .then((user) => {
+      res.render("user-detail", {
+        user: user,
+        path: "/users",
+      });
+    })
+    .catch((err) => console.log(err));
+};
+
+exports.deleteUser = (req, res, next) => {
+  const { userId } = req.body;
+
+  User.findByIdAndRemove(userId)
+    .then(() => {
+      res.redirect("/");
+    })
+    .catch((err) => console.log(err));
 };

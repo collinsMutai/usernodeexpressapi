@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/users/add-user">Add User</a></li>
+
+        </ul>
+    </nav>
+
+    <form action="/users/<% if (editing) { %>edit-user<% } else { %>add-user<% } %>" method="POST">
+        <div>
+            <label for="title">First Name</label>
+            <input type="text" name="firstName" id="firstName" value="<% if (editing) { %><%= user.firstName %><% } %>">
+        </div>
+        <div>
+            <label for="lastName">Last Name</label>
+            <input type="text" name="lastName" id="lastName" value="<% if (editing) { %><%= user.lastName %><% } %>">
+        </div>
+        <div>
+            <label for="age">Age</label>
+            <input type="text" name="age" id="age" value="<% if (editing) { %><%= user.age %><% } %>">
+        </div>
+        <% if (editing) { %>
+            <input type="hidden" value="<%= user._id %>" name="userId">
+            <% } %>
+                <button type="submit">
+                    <% if (editing) { %>Update User<% } else { %>Add User<% } %>
+                </button>
+    </form>
+</body>
+
+</html>
