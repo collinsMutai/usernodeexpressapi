@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign up</title>
+</head>
+<body>
+    <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <% if (isAuthenticated) { %>
+                    <li><a href="/users/add-user">Add User</a></li>
+                    <% } %>
+                        <% if (!isAuthenticated) { %>
+                            <li><a href="/signup">Sign Up</a></li>
+                            <li><a href="/login">Login</a></li>
+                            <% } else { %>
+                                <li>
+                                    <form action="/logout" method="post">
+                                        <button type="submit">Logout</button>
+                                    </form>
+                                </li>
+                                <% } %>
+            </ul>
+    </nav>
+    <h1>Sign up</h1>
+<form class="login-form" action="/signup" method="POST">
+    <div class="form-control">
+        <label for="email">E-Mail</label>
+        <input type="email" name="email" id="email">
+    </div>
+    <div class="form-control">
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password">
+    </div>
+    <!-- <div class="form-control">
+        <label for="confirmPassword">Confirm Password</label>
+        <input type="password" name="confirmPassword" id="confirmPassword">
+    </div> -->
+    <button class="btn" type="submit">Signup</button>
+</form>
+</body>
+</html>
+

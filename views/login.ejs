@@ -3,9 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Login</title>
 </head>
 
 <body>
@@ -27,24 +26,12 @@
                             <% } %>
         </ul>
     </nav>
-    <% if (users.length> 0) { %>
-        <div>
-            <% for (let user of users) { %>
-                <h1>
-                    <%= user.firstName %>
-                </h1>
-                <a href="/users/<%= user._id %>">Details</a> <br>
-                <a href="/users/edit-user/<%= user._id %>?edit=true">Edit User</a>
-                <form action="/users/delete-user" method="POST">
-                    <input type="hidden" value="<%= user._id %>" name="userId">
-                    <button type="submit">Delete</button>
-                </form>
-                <% } %>
-        </div>
-        <% } else { %>
-            <h1>No Users Found!</h1>
-            <a href="/users/add-user">Add Users</a>
-            <% } %>
+    <h1>Login</h1>
+    <form action="/login" method="post">
+        <input type="email" name="email">
+        <input type="password" name="password">
+        <button type="submit">Login</button>
+    </form>
 </body>
 
 </html>

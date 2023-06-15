@@ -6,6 +6,7 @@ exports.getCreateUser = (req, res, next) => {
   res.render("addedit", {
     editing: false,
     path: "/users/add-user",
+    isAuthenticated: req.session.isLoggedIn,
   });
 };
 
@@ -46,6 +47,7 @@ exports.getEditUser = (req, res, next) => {
         editing: editMode,
         user: user,
         path: "/users/edit-user",
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((err) => {
@@ -82,6 +84,7 @@ exports.getUsers = (req, res, next) => {
       res.render("users", {
         users: users,
         path: "/",
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((err) => console.log(err));

@@ -12,8 +12,19 @@
     <nav>
         <ul>
             <li><a href="/">Home</a></li>
-            <li><a href="/users/add-user">Add User</a></li>
-
+            <% if (isAuthenticated) { %>
+                <li><a href="/users/add-user">Add User</a></li>
+                <% } %>
+                    <% if (!isAuthenticated) { %>
+                        <li><a href="/signup">Sign Up</a></li>
+                        <li><a href="/login">Login</a></li>
+                        <% } else { %>
+                            <li>
+                                <form action="/logout" method="post">
+                                    <button type="submit">Logout</button>
+                                </form>
+                            </li>
+                            <% } %>
         </ul>
     </nav>
 
